@@ -53,7 +53,7 @@
   <script id="tasks-template" type="text/x-handlebars-template">
     <ul>
       {{#each collection}}
-        {{view ../TaskView model=this tagName="li" activeId=../activeId}}
+        {{view ../TaskView model=this tagName="li"}}
       {{/each}}
       <li><a href="#task/new">New task...</a></li>
     </ul>

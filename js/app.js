@@ -12,11 +12,16 @@
 
   var TaskView = Backbone.HandlebarsView.extend({
     template: $('#task-template').html(),
-    className: function() {
-      return this.model.get('id') == this.options.activeId ? 'active' : '';
-    },
     initialize: function() {
       this.listenTo(this.model, 'change', this.render);
+    },
+    render: function() {
+      if (this.model.get('active')) {
+        this.$el.addClass('active');
+      } else {
+        this.$el.removeClass('active');
+      }
+      TaskView.__super__.render.apply(this, arguments);
     }
   });
 
@@ -26,12 +31,16 @@
     context: function() {
       return {
         collection: this.collection,
-        activeId:   this.options.activeTaskId,
         TaskView:   TaskView
       };
     },
     initialize: function() {
       this.listenTo(this.collection, 'add remove reset', this.render);
+    },
+    render: function() {
+      console.log('rendering');
+      TasksView.__super__.render.apply(this, arguments);
+      return this;
     }
   });
 
@@ -76,25 +85,37 @@
       this.navigate('#tasks', true);
     },
 
-    list: function() {
-      var tasksView = new TasksView({collection: tasks});
-      $('#tasks').html(tasksView.render().el);
+    list: function(activeTaskId) {
+      if (!this.tasksView) {
+        this.tasksView = new TasksView({collection: tasks});
+      }
+
+      if (activeTaskId) {
+        if (tasks.get(this.activeTaskId)) {
+          tasks.get(this.activeTaskId).set('active', false);
+        }
+        this.activeTaskId = activeTaskId;
+        tasks.get(activeTaskId).set('active', true);
+      }
+
+      if (this.tasksView.$el.parent().size() === 0) {
+        $('#tasks').html(this.tasksView.render().el);
+      }
+      $('.task').remove();
     },
 
     create: function() {
       var task = new Task({id: tasks.last().get('id') + 1});
       tasks.add(task);
 
-      var tasksView = new TasksView({collection: tasks, activeTaskId: task.get('id')});
-      $('#tasks').html(tasksView.render().el);
+      this.list(task.get('id'));
 
       var taskEditView = new TaskEditView({model: task});
       $('#tasks').append(taskEditView.render().el);
     },
 
     show: function(id) {
-      var tasksView = new TasksView({collection: tasks, activeTaskId: id});
-      $('#tasks').html(tasksView.render().el);
+      this.list(id);
 
       var task = tasks.get(id);
       var taskView = new TaskDetailsView({model: task});
@@ -102,8 +123,7 @@
     },
 
     edit: function(id) {
-      var tasksView = new TasksView({collection: tasks, activeTaskId: id});
-      $('#tasks').html(tasksView.render().el);
+      this.list(id);
 
       var task = tasks.get(id);
       var taskEditView = new TaskEditView({model: task});
