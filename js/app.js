@@ -94,10 +94,10 @@
         this.tasksView = new TasksView({collection: tasks});
       }
 
+      if (tasks.get(this.activeTaskId)) {
+        tasks.get(this.activeTaskId).set('active', false);
+      }
       if (activeTaskId) {
-        if (tasks.get(this.activeTaskId)) {
-          tasks.get(this.activeTaskId).set('active', false);
-        }
         this.activeTaskId = activeTaskId;
         tasks.get(activeTaskId).set('active', true);
       }
