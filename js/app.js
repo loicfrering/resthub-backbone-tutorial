@@ -101,7 +101,10 @@
       if (this.tasksView.$el.parent().size() === 0) {
         $('#tasks').html(this.tasksView.render().el);
       }
-      $('.task').remove();
+
+      if (this.currentView) {
+        this.currentView.remove();
+      }
     },
 
     create: function() {
@@ -110,7 +113,7 @@
 
       this.list(task.get('id'));
 
-      var taskEditView = new TaskEditView({model: task});
+      var taskEditView = this.currentView = new TaskEditView({model: task});
       $('#tasks').append(taskEditView.render().el);
     },
 
@@ -118,7 +121,7 @@
       this.list(id);
 
       var task = tasks.get(id);
-      var taskView = new TaskDetailsView({model: task});
+      var taskView = this.currentView = new TaskDetailsView({model: task});
       $('#tasks').append(taskView.render().el);
     },
 
@@ -126,7 +129,7 @@
       this.list(id);
 
       var task = tasks.get(id);
-      var taskEditView = new TaskEditView({model: task});
+      var taskEditView = this.currentView = new TaskEditView({model: task});
       $('#tasks').append(taskEditView.render().el);
     },
 
@@ -140,7 +143,7 @@
     }
   });
 
-  new Router();
+  var router = new Router();
   Backbone.history.start();
 
 })();
