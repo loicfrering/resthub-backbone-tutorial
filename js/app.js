@@ -25,7 +25,7 @@
       } else {
         this.$el.removeClass('active');
       }
-      TaskView.__super__.render.apply(this, arguments);
+      return TaskView.__super__.render.apply(this, arguments);
     }
   });
 
@@ -43,8 +43,7 @@
     },
     render: function() {
       console.log('rendering');
-      TasksView.__super__.render.apply(this, arguments);
-      return this;
+      return TasksView.__super__.render.apply(this, arguments);
     }
   });
 
@@ -141,7 +140,7 @@
     remove: function(id) {
       if (confirm('Do you really want to remove "' + tasks.get(id).get('title') + '"?')) {
         tasks.remove(tasks.get(id));
-        this.navigate('#', true);
+        this.navigate('#tasks', true);
       } else {
         this.navigate('#task/' + id + '/edit', true);
       }
