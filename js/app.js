@@ -14,6 +14,9 @@
     template: $('#task-template').html(),
     className: function() {
       return this.model.get('id') == this.options.activeId ? 'active' : '';
+    },
+    initialize: function() {
+      this.listenTo(this.model, 'change', this.render);
     }
   });
 
@@ -26,12 +29,18 @@
         activeId:   this.options.activeTaskId,
         TaskView:   TaskView
       };
+    },
+    initialize: function() {
+      this.listenTo(this.collection, 'add remove reset', this.render);
     }
   });
 
   var TaskDetailsView = Backbone.HandlebarsView.extend({
     className: 'task',
-    template: $('#task-details-template').html()
+    template: $('#task-details-template').html(),
+    initialize: function() {
+      this.listenTo(this.model, 'change', this.render);
+    }
   });
 
   var TaskEditView = Backbone.HandlebarsView.extend({
