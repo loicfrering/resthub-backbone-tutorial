@@ -73,7 +73,7 @@
     },
 
     create: function() {
-      var task = new Task({id: tasks.length + 1});
+      var task = new Task({id: tasks.last().get('id') + 1});
       tasks.add(task);
 
       var tasksView = new TasksView({collection: tasks, activeTaskId: task.get('id')});
