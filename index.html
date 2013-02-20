@@ -12,12 +12,23 @@
     <div class="navbar">
       <div class="navbar-inner">
         <a class="brand" href="#">RESThub</a>
+        <ul class="nav">
+          <li><a href="#tasks">Tasks</a></li>
+        </ul>
       </div>
     </div>
 
     <div id="tasks">
     </div>
   </div>
+
+  <script id="index-template" type="text/x-handlebars-template">
+    <div class="hero-unit">
+      <h1>RESThub Backbone Tutorial</h1>
+      <p>Welcome to the RESThub Backbone Tutorial!</p>
+      <p><a href="http://resthub.org" class="btn btn-primary btn-large">Learn more</a></p>
+    </div>
+  </script>
 
   <script id="task-template" type="text/x-handlebars-template">
     <h1><a href="#task/{{id}}">{{title}}</a></h1>

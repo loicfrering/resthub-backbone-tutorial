@@ -10,6 +10,10 @@
     model: Task
   });
 
+  var IndexView = Backbone.HandlebarsView.extend({
+    template: $('#index-template').html()
+  });
+
   var TaskView = Backbone.HandlebarsView.extend({
     template: $('#task-template').html(),
     initialize: function() {
@@ -82,7 +86,8 @@
     },
 
     index: function() {
-      this.navigate('#tasks', true);
+      var indexView = new IndexView();
+      $('#tasks').html(indexView.render().el);
     },
 
     list: function(activeTaskId) {
