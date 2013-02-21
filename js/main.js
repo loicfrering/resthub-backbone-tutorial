@@ -12,27 +12,17 @@ require.config({
         'jquery'
       ],
       exports: 'Backbone'
-    },
-    'backbone.handlebars': {
-      deps: [
-        'backbone',
-        'handlebars'
-      ],
-      exports: 'Backbone'
     }
   },
 
   paths: {
-    text:                  'libs/text',
-    hbs:                   'libs/resthub/require-handlebars',
-    jquery:                'libs/jquery',
-    underscore:            'libs/underscore',
-    backbone:              'libs/backbone',
-    handlebars:            'libs/handlebars',
-    'backbone.handlebars': 'libs/backbone.handlebars'
+    text:       'libs/text',
+    hbs:        'libs/resthub/require-handlebars',
+    jquery:     'libs/jquery',
+    underscore: 'libs/underscore',
+    backbone:   'libs/backbone',
+    handlebars: 'libs/handlebars'
   }
 });
 
-require(['backbone.handlebars'], function(BackboneHandlebars) {
-  require(['app']);
-});
+require(['app']);

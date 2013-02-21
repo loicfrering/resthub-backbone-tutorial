@@ -1,15 +1,14 @@
 define(['backbone', 'views/task', 'hbs!templates/tasks'], function(Backbone, TaskView, tasksTemplate) {
 
-  var TasksView = Backbone.HandlebarsView.extend({
+  var TasksView = Backbone.View.extend({
     className: 'tasks',
-    template: tasksTemplate,
     initialize: function() {
       this.listenTo(this.collection, 'reset', this.render);
       this.listenTo(this.collection, 'add', this.add);
     },
     render: function() {
       console.log('TasksView rendering...');
-      TasksView.__super__.render.apply(this, arguments);
+      this.$el.html(tasksTemplate());
       this.collection.each(this.add, this);
       return this;
     },

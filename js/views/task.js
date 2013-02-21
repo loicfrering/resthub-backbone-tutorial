@@ -1,7 +1,6 @@
 define(['backbone', 'hbs!templates/task'], function(Backbone, taskTemplate) {
 
-  var TaskView = Backbone.HandlebarsView.extend({
-    template: taskTemplate,
+  var TaskView = Backbone.View.extend({
     initialize: function() {
       this.listenTo(this.model, 'change', this.render);
       this.listenTo(this.model, 'remove', this.remove);
@@ -12,7 +11,8 @@ define(['backbone', 'hbs!templates/task'], function(Backbone, taskTemplate) {
       } else {
         this.$el.removeClass('active');
       }
-      return TaskView.__super__.render.apply(this, arguments);
+      this.$el.html(taskTemplate(this.model.attributes));
+      return this;
     }
   });
 
