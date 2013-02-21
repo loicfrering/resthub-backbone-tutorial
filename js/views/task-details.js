@@ -1,13 +1,12 @@
-define(['backbone', 'hbs!templates/task-details'], function(Backbone, taskDetailsTemplate) {
+define(['backbone', 'resthub', 'hbs!templates/task-details'], function(Backbone, Resthub, taskDetailsTemplate) {
 
-  var TaskDetailsView = Backbone.View.extend({
+  var TaskDetailsView = Resthub.View.extend({
+    root: '#tasks',
+    strategy: 'append',
     className: 'task',
+    template: taskDetailsTemplate,
     initialize: function() {
       this.listenTo(this.model, 'change', this.render);
-    },
-    render: function() {
-      this.$el.html(taskDetailsTemplate(this.model.attributes));
-      return this;
     }
   });
 

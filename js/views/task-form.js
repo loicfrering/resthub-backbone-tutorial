@@ -1,14 +1,13 @@
-define(['backbone', 'hbs!templates/task-form'], function(Backbone, taskFormTemplate) {
+define(['backbone', 'resthub', 'hbs!templates/task-form'], function(Backbone, Resthub, taskFormTemplate) {
 
-  var TaskFormView = Backbone.View.extend({
+  var TaskFormView = Resthub.View.extend({
+    root: '#tasks',
+    strategy: 'append',
+    template: taskFormTemplate,
     events: {
       'submit form': 'save'
     },
     className: 'task',
-    render: function() {
-      this.$el.html(taskFormTemplate(this.model.attributes));
-      return this;
-    },
     save: function() {
       this.model.set({
         title: this.$('#title').val(),

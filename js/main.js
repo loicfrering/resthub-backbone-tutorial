@@ -21,7 +21,8 @@ require.config({
     jquery:     'libs/jquery',
     underscore: 'libs/underscore',
     backbone:   'libs/backbone',
-    handlebars: 'libs/handlebars'
+    handlebars: 'libs/handlebars',
+    resthub:    'libs/resthub/resthub'
   }
 });
 

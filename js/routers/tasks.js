@@ -50,7 +50,7 @@ define(['backbone', 'models/task', 'views/tasks'], function(Backbone, Task, Task
 
       require(['views/task-form'], _.bind(function(TaskFormView) {
         var taskFormView = this.currentView = new TaskFormView({model: task});
-        $('#tasks').append(taskFormView.render().el);
+        taskFormView.render();
       }, this));
     },
 
@@ -60,7 +60,7 @@ define(['backbone', 'models/task', 'views/tasks'], function(Backbone, Task, Task
 
       require(['views/task-details'], _.bind(function(TaskDetailsView) {
         var taskView = this.currentView = new TaskDetailsView({model: task});
-        $('#tasks').append(taskView.render().el);
+        taskView.render();
       }, this));
     },
 
@@ -70,7 +70,7 @@ define(['backbone', 'models/task', 'views/tasks'], function(Backbone, Task, Task
 
       require(['views/task-form'], _.bind(function(TaskFormView) {
         var taskFormView = this.currentView = new TaskFormView({model: task});
-        $('#tasks').append(taskFormView.render().el);
+        taskFormView.render();
       }, this));
     },
 

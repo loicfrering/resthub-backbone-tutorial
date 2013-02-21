@@ -1,6 +1,7 @@
-define(['backbone', 'hbs!templates/task'], function(Backbone, taskTemplate) {
+define(['backbone', 'resthub', 'hbs!templates/task'], function(Backbone, Resthub, taskTemplate) {
 
-  var TaskView = Backbone.View.extend({
+  var TaskView = Resthub.View.extend({
+    template: taskTemplate,
     initialize: function() {
       this.listenTo(this.model, 'change', this.render);
       this.listenTo(this.model, 'remove', this.remove);
@@ -11,7 +12,7 @@ define(['backbone', 'hbs!templates/task'], function(Backbone, taskTemplate) {
       } else {
         this.$el.removeClass('active');
       }
-      this.$el.html(taskTemplate(this.model.attributes));
+      TaskView.__super__.render.apply(this);
       return this;
     }
   });

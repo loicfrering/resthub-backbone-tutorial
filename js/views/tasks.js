@@ -1,6 +1,7 @@
-define(['backbone', 'views/task', 'hbs!templates/tasks'], function(Backbone, TaskView, tasksTemplate) {
+define(['backbone', 'resthub', 'views/task', 'hbs!templates/tasks'], function(Backbone, Resthub, TaskView, tasksTemplate) {
 
-  var TasksView = Backbone.View.extend({
+  var TasksView = Resthub.View.extend({
+    template: tasksTemplate,
     className: 'tasks',
     initialize: function() {
       this.listenTo(this.collection, 'reset', this.render);
@@ -8,7 +9,7 @@ define(['backbone', 'views/task', 'hbs!templates/tasks'], function(Backbone, Tas
     },
     render: function() {
       console.log('TasksView rendering...');
-      this.$el.html(tasksTemplate());
+      TasksView.__super__.render.apply(this);
       this.collection.each(this.add, this);
       return this;
     },
