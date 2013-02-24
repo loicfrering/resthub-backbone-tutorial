@@ -1,4 +1,4 @@
-define(['backbone', 'models/task', 'views/tasks'], function(Backbone, Task, TasksView) {
+define(['backbone', 'collections/tasks', 'models/task', 'views/tasks'], function(Backbone, Tasks, Task, TasksView) {
 
   var TasksRouter = Backbone.Router.extend({
     routes: {
@@ -10,8 +10,16 @@ define(['backbone', 'models/task', 'views/tasks'], function(Backbone, Task, Task
       'task/:id/remove': 'remove'
     },
 
-    initialize: function(options) {
-      this.tasks = options.tasks;
+    initialize: function() {
+      this.tasks = new Tasks([{
+        id: 1,
+        title: 'Task1',
+        description: 'Task1 desc.'
+      }, {
+        id: 2,
+        title: 'Task2',
+        description: 'Task2 desc.'
+      }]);
     },
 
     index: function() {
