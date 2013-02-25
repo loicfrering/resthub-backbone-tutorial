@@ -1,8 +1,9 @@
 define(['backbone', 'resthub', 'views/task', 'hbs!templates/tasks'], function(Backbone, Resthub, TaskView, tasksTemplate) {
 
   var TasksView = Resthub.View.extend({
+    root: '#app',
     template: tasksTemplate,
-    className: 'tasks',
+    id: 'tasks',
     initialize: function() {
       this.listenTo(this.collection, 'reset', this.render);
       this.listenTo(this.collection, 'add', this.add);

@@ -32,7 +32,7 @@ define(['backbone', 'collections/tasks', 'models/task', 'views/tasks'], function
     list: function(activeTaskId) {
       if (!this.tasksView || this.tasksView.$el.parent().size() === 0) {
         this.tasksView = new TasksView({collection: this.tasks});
-        $('#tasks').html(this.tasksView.render().el);
+        this.tasksView.render();
       }
 
       if (this.currentView) {
