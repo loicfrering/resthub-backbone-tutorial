@@ -25,13 +25,18 @@ define(['backbone', 'collections/tasks', 'models/task', 'views/tasks'], function
     index: function() {
       require(['views/index'], function(IndexView) {
         var indexView = new IndexView();
-        $('#tasks').html(indexView.render().el);
+        indexView.render();
       });
     },
 
     list: function(activeTaskId) {
-      if (!this.tasksView) {
+      if (!this.tasksView || this.tasksView.$el.parent().size() === 0) {
         this.tasksView = new TasksView({collection: this.tasks});
+        $('#tasks').html(this.tasksView.render().el);
+      }
+
+      if (this.currentView) {
+        this.currentView.remove();
       }
 
       if (this.tasks.get(this.activeTaskId)) {
@@ -40,14 +45,6 @@ define(['backbone', 'collections/tasks', 'models/task', 'views/tasks'], function
       if (activeTaskId) {
         this.activeTaskId = activeTaskId;
         this.tasks.get(activeTaskId).set('active', true);
-      }
-
-      if (this.tasksView.$el.parent().size() === 0) {
-        $('#tasks').html(this.tasksView.render().el);
-      }
-
-      if (this.currentView) {
-        this.currentView.remove();
       }
     },
 
