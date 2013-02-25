@@ -29,7 +29,7 @@ define(['backbone', 'collections/tasks', 'models/task', 'views/tasks'], function
       });
     },
 
-    list: function(activeTaskId) {
+    list: function() {
       if (!this.tasksView || this.tasksView.$el.parent().size() === 0) {
         this.tasksView = new TasksView({collection: this.tasks});
         this.tasksView.render();
@@ -39,44 +39,47 @@ define(['backbone', 'collections/tasks', 'models/task', 'views/tasks'], function
         this.currentView.remove();
       }
 
-      if (this.tasks.get(this.activeTaskId)) {
-        this.tasks.get(this.activeTaskId).set('active', false);
+      this.active();
+    },
+
+    active: function(activeTask) {
+      if (this.activeTask) {
+        this.activeTask.set('active', false);
       }
-      if (activeTaskId) {
-        this.activeTaskId = activeTaskId;
-        this.tasks.get(activeTaskId).set('active', true);
+      if (activeTask) {
+        this.activeTask = activeTask;
+        this.activeTask.set('active', true);
       }
+    },
+
+    current: function(view, id) {
+      var task = this.tasks.get(id);
+      if (!task) {
+        alert('The task with id ' + id + ' does not exist.');
+        return this.navigate('#tasks', true);
+      }
+
+      this.list();
+      this.active(task);
+
+      require(['views/' + view], _.bind(function(viewClass) {
+        this.currentView = new viewClass({model: task});
+        this.currentView.render();
+      }, this));
     },
 
     create: function() {
       var task = new Task({id: this.tasks.last().get('id') + 1});
       this.tasks.add(task);
-      this.list(task.get('id'));
-
-      require(['views/task-form'], _.bind(function(TaskFormView) {
-        var taskFormView = this.currentView = new TaskFormView({model: task});
-        taskFormView.render();
-      }, this));
+      this.current('task-form', task.get('id'));
     },
 
     show: function(id) {
-      this.list(id);
-      var task = this.tasks.get(id);
-
-      require(['views/task-details'], _.bind(function(TaskDetailsView) {
-        var taskView = this.currentView = new TaskDetailsView({model: task});
-        taskView.render();
-      }, this));
+      this.current('task-details', id);
     },
 
     edit: function(id) {
-      this.list(id);
-      var task = this.tasks.get(id);
-
-      require(['views/task-form'], _.bind(function(TaskFormView) {
-        var taskFormView = this.currentView = new TaskFormView({model: task});
-        taskFormView.render();
-      }, this));
+      this.current('task-form', id);
     },
 
     remove: function(id) {
