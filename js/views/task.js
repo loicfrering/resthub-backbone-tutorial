@@ -7,6 +7,7 @@ define(['backbone', 'resthub', 'hbs!templates/task'], function(Backbone, Resthub
       this.listenTo(this.model, 'remove', this.remove);
     },
     render: function() {
+      console.log('TaskView rendering: ' + this.model.get('title'));
       if (this.model.get('active')) {
         this.$el.addClass('active');
       } else {

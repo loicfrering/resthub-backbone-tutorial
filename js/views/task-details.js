@@ -7,6 +7,10 @@ define(['backbone', 'resthub', 'hbs!templates/task-details'], function(Backbone,
     template: taskDetailsTemplate,
     initialize: function() {
       this.listenTo(this.model, 'change', this.render);
+    },
+    render: function() {
+      console.log('TaskDetailsView rendering: ' + this.model.get('title'));
+      TaskDetailsView.__super__.render.apply(this);
     }
   });
 
