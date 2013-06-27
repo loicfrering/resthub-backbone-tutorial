@@ -1,4 +1,4 @@
-define(['backbone', 'resthub', 'hbs!templates/task-details'], function(Backbone, Resthub, taskDetailsTemplate) {
+define(['backbone', 'resthub', 'hbs!template/task-details'], function(Backbone, Resthub, taskDetailsTemplate) {
 
   var TaskDetailsView = Resthub.View.extend({
     root: '.task',
