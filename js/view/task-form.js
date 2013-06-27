@@ -1,4 +1,4 @@
-define(['backbone', 'resthub', 'hbs!templates/task-form'], function(Backbone, Resthub, taskFormTemplate) {
+define(['backbone', 'resthub', 'hbs!template/task-form'], function(Backbone, Resthub, taskFormTemplate) {
 
   var TaskFormView = Resthub.View.extend({
     root: '.task',

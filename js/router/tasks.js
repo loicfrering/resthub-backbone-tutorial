@@ -1,4 +1,4 @@
-define(['backbone', 'collections/tasks', 'models/task', 'views/tasks'], function(Backbone, Tasks, Task, TasksView) {
+define(['backbone', 'collection/tasks', 'model/task', 'view/tasks'], function(Backbone, Tasks, Task, TasksView) {
 
   var TasksRouter = Backbone.Router.extend({
     routes: {
@@ -23,7 +23,7 @@ define(['backbone', 'collections/tasks', 'models/task', 'views/tasks'], function
     },
 
     index: function() {
-      require(['views/index'], function(IndexView) {
+      require(['view/index'], function(IndexView) {
         var indexView = new IndexView();
         indexView.render();
       });
@@ -62,7 +62,7 @@ define(['backbone', 'collections/tasks', 'models/task', 'views/tasks'], function
       this.list();
       this.active(task);
 
-      require(['views/' + view], _.bind(function(viewClass) {
+      require(['view/' + view], _.bind(function(viewClass) {
         this.currentView = new viewClass({model: task});
         this.currentView.render();
       }, this));

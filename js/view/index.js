@@ -1,4 +1,4 @@
-define(['backbone', 'resthub', 'hbs!templates/index'], function(Backbone, Resthub, indexTemplate) {
+define(['backbone', 'resthub', 'hbs!template/index'], function(Backbone, Resthub, indexTemplate) {
 
   var IndexView = Resthub.View.extend({
     root: '#app',

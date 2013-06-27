@@ -1,4 +1,4 @@
-define(['backbone', 'resthub', 'hbs!templates/task'], function(Backbone, Resthub, taskTemplate) {
+define(['backbone', 'resthub', 'hbs!template/task'], function(Backbone, Resthub, taskTemplate) {
 
   var TaskView = Resthub.View.extend({
     template: taskTemplate,

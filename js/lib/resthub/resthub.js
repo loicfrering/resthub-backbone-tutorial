@@ -1,6 +1,8 @@
-define(['underscore', 'backbone', 'jquery', 'libs/resthub/jquery-event-destroyed'], function(_, Backbone, $) {
+define(['underscore', 'backbone', 'jquery', 'lib/resthub/jquery-event-destroyed'], function(_, Backbone, $) {
 
     var Resthub = { };
+
+    Resthub.VERSION = '2.1.2';
 
     // Avoid GET caching issues with Internet Explorer
     if (XMLHttpRequest) {
@@ -256,10 +258,16 @@ define(['underscore', 'backbone', 'jquery', 'libs/resthub/jquery-event-destroyed
         var constraintMessage = function(propKey, constraint, messages) {
             var msg = constraint.message;
 
+            var msgPropKey = 'validation.' + propKey + '.' +  constraint.type + '.message';
             var msgKey = 'validation.' + constraint.type + '.message';
 
-            if (messages && messages[msgKey]) {
-                msg = messages[msgKey];
+            if (messages) {
+
+                if (messages[msgPropKey]) {
+                    msg = messages[msgPropKey];
+                } else if (messages[msgKey]) {
+                    msg = messages[msgKey];
+                }
 
                 for (var p in constraint) {
                     msg = msg.replace(new RegExp('{' + p + '}', 'g'), constraint[p]);
@@ -533,20 +541,37 @@ define(['underscore', 'backbone', 'jquery', 'libs/resthub/jquery-event-destroyed
         //
         delegateEvents: function(events) {
 
-            Resthub.View.__super__.delegateEvents.call(this, events);
+            Resthub.View.__super__.delegateEvents.apply(this, arguments);
             if (!(events || (events = getValue(this, 'events')))) return;
+            
             _.each(events, _.bind(function(method, key) {
                 if (key.indexOf(this.globalEventsIdentifier) != 0) return;
                 if (!_.isFunction(method)) method = this[method];
                 if (!method) throw new Error('Method "' + key + '" does not exist');
                 this.listenTo(Backbone, key, method);
             }, this));
+
+            // Bind Backbone Validation if used
+            if (Backbone.Validation) {
+                Backbone.Validation.bind(this);
+            }
+
+            return this;
+        },
+
+        // Override backbone setElement to unbind Backbone Validation
+        undelegateEvents: function() {
+            Resthub.View.__super__.undelegateEvents.apply(this, arguments);
+            if (Backbone.Validation) {
+                Backbone.Validation.unbind(this);
+            }
+            return this;
         },
 
         // Override backbone setElement to bind a destroyed special event
         // when el is detached from DOM
         setElement: function(element, delegate) {
-            Resthub.View.__super__.setElement.call(this, element, delegate);
+            Resthub.View.__super__.setElement.apply(this, arguments);
 
             if (this.root) {
                 this._ensureRoot();
@@ -554,23 +579,29 @@ define(['underscore', 'backbone', 'jquery', 'libs/resthub/jquery-event-destroyed
             }
 
             // call backbone stopListening method on el DOM removing
-            this.$el.on("destroyed", _.bind(this.stopListening, this));
+            this.$el.on("destroyed", _.bind(this._destroy, this));
 
             return this;
+        },
+
+        _destroy: function() {
+            // Trigger destroy event on the view
+            this.trigger("destroy");
+            this.stopListening();
         },
 
         // Override Backbone method unbind destroyed special event
         // after remove : this prevents stopListening to be called twice
         remove: function() {
             this.$el.off("destroyed");
-            Resthub.View.__super__.remove.call(this);
-        },
-
-        stopListening: function() {
-            Resthub.View.__super__.stopListening.call(this);
+            // Trigger destroy event on the view
+            this.trigger("destroy");
+            // Unbind Backbone Validation is needed
             if (Backbone.Validation) {
                 Backbone.Validation.unbind(this);
             }
+            Resthub.View.__super__.remove.apply(this, arguments);
+
             return this;
         },
 
@@ -595,7 +626,7 @@ define(['underscore', 'backbone', 'jquery', 'libs/resthub/jquery-event-destroyed
 
                 // specific test for radio to get only checked option or null is no option checked
                 if ($this.is(':radio')) {
-                    if ($this.attr('checked')) {
+                    if ($this.is(':checked')) {
                         attributes[name] = $this.val();
                     } else if (!attributes[name]) {
                         attributes[name] = null;
@@ -606,6 +637,9 @@ define(['underscore', 'backbone', 'jquery', 'libs/resthub/jquery-event-destroyed
                         var checkboxes = form.find("input[type='checkbox'][name='" + name + "']");
                         if (checkboxes.length > 1) {
                             attributes[name] = [];
+                        }
+                        else if (checkboxes.length === 1) {
+                            attributes[name] = "false";
                         }
                     }
                     if ($this.is(':checked')) {
@@ -621,9 +655,10 @@ define(['underscore', 'backbone', 'jquery', 'libs/resthub/jquery-event-destroyed
             });
 
             if (model) {
-                model.set(attributes, {silent: true});
-                model.set({});
+                model.set(attributes, {validate: true});
             }
+
+            return this;
         }
 
     });
@@ -644,7 +679,7 @@ define(['underscore', 'backbone', 'jquery', 'libs/resthub/jquery-event-destroyed
 
             if (options && options.pushState) {
                 // force all links to be handled by Backbone pushstate - no get will be send to server
-                $(window.document).on('click', 'a:not([data-bypass])', function(evt) {
+                $(window.document).on('click', 'a[href]:not([data-bypass])', function(evt) {
 
                     var protocol = this.protocol + '//';
                     var href = this.href;

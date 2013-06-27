@@ -16,13 +16,13 @@ require.config({
   },
 
   paths: {
-    text:       'libs/text',
-    hbs:        'libs/resthub/require-handlebars',
-    jquery:     'libs/jquery',
-    underscore: 'libs/underscore',
-    backbone:   'libs/backbone',
-    handlebars: 'libs/handlebars',
-    resthub:    'libs/resthub/resthub'
+    text:       'lib/text',
+    hbs:        'lib/resthub/require-handlebars',
+    jquery:     'lib/jquery',
+    underscore: 'lib/underscore',
+    backbone:   'lib/backbone',
+    handlebars: 'lib/handlebars',
+    resthub:    'lib/resthub/resthub'
   }
 });
 
